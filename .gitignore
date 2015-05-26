@@ -1,0 +1,33 @@
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+*.dat
+
+# Folders
+_obj
+_test
+
+# For MacOS:
+.DS_Store
+
+# For *nix:
+*.swp
+
+# For pid
+*.pid
+
+# For log
+*.log
+
+# For tar bak
+*.gz
+*.tgz
+*.tar.gz
+
+# For revel
+**/bin
+
+**/app/tmp
+**/app/routes
+
