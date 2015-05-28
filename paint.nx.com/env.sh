@@ -1,2 +1,2 @@
-GOPATH=:`pwd`:$(cd ../revel; pwd)
+GOPATH=$GOPATH:`pwd`:$(cd ../revel; pwd)
 export GOPATH
