@@ -1,10 +1,12 @@
 <!doctype html>
 <html>
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <script src="/public/js/canvas2image.js"></script>
+<script src="/public/js/jquery-1.9.1.min.js"></script>
 <style>
     .doc {
-        width: 604px;
+        width: 0 auto;
         margin: 0 auto;
     }
     canvas {
@@ -13,8 +15,9 @@
     }
 </style>
 <body>
+<div class="xxx">xxx</div>
 <div class="doc">
-    <canvas width="600" height="400" id="cvs"></canvas>
+    <canvas align="center" width="300" height="400" id="cvs"></canvas>
     <div>
         <p>
             <button id="save">save</button> or <button id="convert">convert to</button> as: 
@@ -33,12 +36,15 @@
     </div>
 </div>
 <script>
-    var canvas, ctx, bMouseIsDown = false, iLastX, iLastY,
+    var canvas, ctx, bMouseIsDown = false, iLastX, iLastY, offset,
         $save, $imgs,
         $convert, $imgW, $imgH,
         $sel;
+    var $xxx = $("div.xxx");
+    var lines = [,,];
     function init () {
         canvas = document.getElementById('cvs');
+	offset = $(canvas).offset();
         ctx = canvas.getContext('2d');
         $save = document.getElementById('save');
         $convert = document.getElementById('convert');
@@ -47,7 +53,7 @@
         $imgW = document.getElementById('imgW');
         $imgH = document.getElementById('imgH');
         bind();
-        draw();
+      //  draw();
     }
     function bind () {
         canvas.onmousedown = function(e) {
@@ -71,6 +77,40 @@
                 iLastY = iY;
             }
         };
+
+	// finger start
+	canvas.addEventListener('touchstart', function(event){
+	    $xxx.text("hehe");
+	    $.each(event.touches, function(i, touch) {
+              
+                var id      = touch.identifier,
+                    colors  = ["red", "green", "yellow", "blue", "magenta", "orangered"],
+                    mycolor = colors[Math.floor(Math.random() * colors.length)];
+		$xxx.append(""+this.pageX + "--" + this.pageY + "--" + mycolor);
+                lines[id] = { x     : this.pageX - offset.left,
+                              y     : this.pageY - offset.top,
+                              color : mycolor
+                           };
+            });
+            event.preventDefault();
+	}, false);
+
+	// finger move
+	canvas.addEventListener('touchmove', function(event){
+		var e = event, hmm = {};
+		$xxx.text("lala");
+            	$.each(event.touches, function(i, touch) {
+			$xxx.append("!");
+                	var id = touch.identifier;
+                	moveX = this.pageX - offset.left - lines[id].x,
+                	moveY = this.pageY - offset.top - lines[id].y;//移动的x\y
+                	var ret = move(id, moveX, moveY);//canvas的画线
+			$xxx.append("#");
+                	lines[id].x = ret.x;
+                	lines[id].y = ret.y;
+            	});
+		event.preventDefault();
+	},false);
         
         $save.onclick = function (e) {
             var type = $sel.value,
@@ -82,8 +122,18 @@
             var type = $sel.value,
                 w = $imgW.value,
                 h = $imgH.value;
-            $imgs.appendChild(Canvas2Image.convertToImage(canvas, w, h, type))
+            $imgs.appendChild(Canvas2Image.convertToImage(canvas, w, h, type));
         }
+	function move (i, changeX, changeY) {
+        	$xxx.append("~~~~~~");
+        	ctx.strokeStyle = lines[i].color;//设定颜色
+        	ctx.beginPath();//开始路径
+        	ctx.moveTo(lines[i].x, lines[i].y);//移动到
+        	ctx.lineTo(lines[i].x + changeX, lines[i].y + changeY);//画线
+        	ctx.stroke();//填充颜色
+        	ctx.closePath();//结束路径
+        	return { x: lines[i].x + changeX, y: lines[i].y + changeY };//返回最后的点坐标
+    	}
         
     }
     function draw () {
@@ -92,6 +142,17 @@
         ctx.fillStyle = 'red';
         ctx.fillRect(100, 100, 50, 50);
     }
+    
+    //function move (i, changeX, changeY) {
+	//$xxx.append("~~~~~~");
+	//ctx.strokeStyle = lines[i].color;//设定颜色
+    //    ctx.beginPath();//开始路径
+    //    ctx.moveTo(lines[i].x, lines[i].y);//移动到
+    //    ctx.lineTo(lines[i].x + changeX, lines[i].y + changeY);//画线
+    //    ctx.stroke();//填充颜色
+    //    ctx.closePath();//结束路径
+    //    return { x: lines[i].x + changeX, y: lines[i].y + changeY };//返回最后的点坐标
+    //}
     
     
     onload = init;
