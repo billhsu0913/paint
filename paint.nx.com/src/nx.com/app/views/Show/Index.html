@@ -44,7 +44,8 @@
         $convert, $imgW, $imgH,
         $sel;
     var $xxx = $("div.xxx");
-    var lines = [,,];
+    //var lines = [,,];
+    var lines = [,];
     function init () {
         canvas = document.getElementById('cvs');
 	offset = $(canvas).offset();
@@ -86,13 +87,13 @@
 	    $xxx.text("hehe");
 	    $.each(event.touches, function(i, touch) {
               
-                var id      = touch.identifier,
-                    colors  = ["red", "green", "yellow", "blue", "magenta", "orangered"],
-                    mycolor = colors[Math.floor(Math.random() * colors.length)];
-		$xxx.append(""+this.pageX + "--" + this.pageY + "--" + mycolor);
+                var id      = touch.identifier;
+                   // colors  = ["red", "green", "yellow", "blue", "magenta", "orangered"],
+                   // mycolor = colors[Math.floor(Math.random() * colors.length)];
+		$xxx.append(""+this.pageX + "--" + this.pageY);
                 lines[id] = { x     : this.pageX - offset.left,
-                              y     : this.pageY - offset.top,
-                              color : mycolor
+                              y     : this.pageY - offset.top
+                           //   color : mycolor
                            };
             });
             event.preventDefault();
@@ -129,7 +130,8 @@
         }
 	function move (i, changeX, changeY) {
         	$xxx.append("~~~~~~");
-        	ctx.strokeStyle = lines[i].color;//设定颜色
+        	// ctx.strokeStyle = lines[i].color;//设定颜色
+		ctx.lineWidth = 4;
         	ctx.beginPath();//开始路径
         	ctx.moveTo(lines[i].x, lines[i].y);//移动到
         	ctx.lineTo(lines[i].x + changeX, lines[i].y + changeY);//画线
