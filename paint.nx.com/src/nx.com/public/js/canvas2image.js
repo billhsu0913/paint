@@ -206,7 +206,8 @@ var Canvas2Image = function () {
 				saveFile(makeURI(strData, downloadMime));
 			} else {
 				var strData = getDataURL(canvas, type, width, height);
-				saveFile(strData.replace(type, downloadMime));
+				return strData;
+				// saveFile(strData.replace(type, downloadMime));
 			}
 		
 		}
@@ -220,11 +221,9 @@ var Canvas2Image = function () {
 			if (/bmp/.test(type)) {
 				var data = getImageData(scaleCanvas(canvas, width, height));
 				var strData = genBitmapImage(data);
-				console.log(">>>>>>here>>>>>>>>>>>>>" + strData);
 				return genImage(makeURI(strData, 'image/bmp'));
 			} else {
 				var strData = getDataURL(canvas, type, width, height);
-				console.log(">>>>>>here2>>>>>>>" + strData);
 				return genImage(strData);
 			}
 		}

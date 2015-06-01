@@ -5,6 +5,8 @@
 module:testrunner
 
 GET     /                                       Show.Index
+POST    /putimage                               Show.PutImage
+GET     /getimage/:file                         Show.GetImage
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
